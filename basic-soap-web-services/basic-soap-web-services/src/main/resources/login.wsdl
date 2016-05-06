@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://localhost:8080/login/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" name="login" targetNamespace="http://localhost:8080/login/">
+  <wsdl:types>
+    <xs:schema targetNamespace="http://localhost:8080/login/">
+           <xs:complexType name="userType">
+				<xs:sequence>
+					<xs:element type="xs:string" name="username" />
+					<xs:element type="xs:string" name="password" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="user" type="tns:userType" />
+			
+			<xs:element name="response" type="tns:responseType" />
+			<xs:complexType name="statusType">
+				<xs:sequence>
+					<xs:element type="xs:short" name="code" />
+					<xs:element type="xs:string" name="message" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="responseType">
+				<xs:sequence>
+					<xs:element type="tns:statusType" name="status" />
+				</xs:sequence>
+			</xs:complexType>
+		</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="doLoginRequest">
+    <wsdl:part element="tns:user" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="doLoginResponse">
+    <wsdl:part element="tns:response" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="login">
+    <wsdl:operation name="doLogin">
+      <wsdl:input message="tns:doLoginRequest"/>
+      <wsdl:output message="tns:doLoginResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="loginSOAP" type="tns:login">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="doLogin">
+      <soap:operation soapAction="http://localhost:8080/login/doLogin"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="login">
+    <wsdl:port binding="tns:loginSOAP" name="loginSOAP">
+      <soap:address location="http://localhost:8080/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
